@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMS Spam Detection</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>📩 SMS Spam Detection</h1>
+
+    <form action="/predict" method="POST">
+
+        <textarea
+            name="message"
+            rows="8"
+            placeholder="Type your SMS here..."
+            required>{{ message if message else "" }}</textarea>
+
+        <p id="counter">0 Characters</p>
+
+        <button type="submit">
+            Predict
+        </button>
+
+        <button type="button" onclick="clearText()">
+            Clear
+        </button>
+
+    </form>
+
+    {% if prediction %}
+
+    <div class="result {{ color }}">
+
+        <h2>{{ prediction }}</h2>
+
+        <h3>Confidence : {{ confidence }}%</h3>
+
+        <div class="progress">
+            <div class="progress-fill" style="width: {{ confidence }}%;"></div>
+        </div>
+
+    </div>
+
+    {% endif %}
+
+    <!-- Prediction History -->
+    {% if history %}
+
+    <div class="history">
+
+        <h2>📜 Recent Predictions</h2>
+
+        <table>
+
+            <tr>
+                <th>Message</th>
+                <th>Result</th>
+                <th>Confidence</th>
+            </tr>
+
+            {% for item in history %}
+
+            <tr>
+                <td>{{ item.message }}</td>
+                <td>{{ item.result }}</td>
+                <td>{{ item.confidence }}%</td>
+            </tr>
+
+            {% endfor %}
+
+        </table>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>
